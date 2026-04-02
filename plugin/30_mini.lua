@@ -185,9 +185,6 @@ now_if_args(function()
   end
   Config.new_autocmd('LspAttach', nil, on_attach, "Set 'omnifunc'")
 
-  -- Advertise to servers that Neovim now supports certain set of completion and
-  -- signature features through 'mini.completion'.
-  vim.lsp.config('*', { capabilities = MiniCompletion.get_lsp_capabilities() })
 end)
 
 -- Navigate and manipulate file system
@@ -444,7 +441,7 @@ later(function() require('mini.comment').setup() end)
 --
 -- It is not enabled by default because its effects are a matter of taste.
 -- Uncomment next line (use `gcc`) to enable.
--- later(function() require('mini.cursorword').setup() end)
+later(function() require('mini.cursorword').setup() end)
 
 -- Work with diff hunks that represent the difference between the buffer text and
 -- some reference text set by a source. Default source uses text from Git index.

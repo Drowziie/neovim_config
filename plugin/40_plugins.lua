@@ -94,15 +94,31 @@ end)
 --
 -- Add it now if file (and not 'mini.starter') is shown after startup.
 now_if_args(function()
-  add({ 'https://github.com/neovim/nvim-lspconfig' })
+  add({
+    { src = 'https://github.com/neovim/nvim-lspconfig' },
+    { src = 'https://github.com/hrsh7th/nvim-cmp' },
+    { src = 'https://github.com/hrsh7th/cmp-nvim-lsp' },
+  })
 
-  -- Use `:h vim.lsp.enable()` to automatically enable language server based on
-  -- the rules provided by 'nvim-lspconfig'.
-  -- Use `:h vim.lsp.config()` or 'after/lsp/' directory to configure servers.
-  -- Uncomment and tweak the following `vim.lsp.enable()` call to enable servers.
-  -- vim.lsp.enable({
-  --   -- For example, if `lua-language-server` is installed, use `'lua_ls'` entry
-  -- })
+
+  -- Merge Mini + cmp capabilities
+  local capabilities = MiniCompletion.get_lsp_capabilities()
+
+  local ok, cmp_lsp = pcall(require, 'cmp_nvim_lsp')
+  if ok then
+    capabilities = cmp_lsp.default_capabilities(capabilities)
+  end
+
+  -- Apply globally
+  vim.lsp.config('*', {
+    capabilities = capabilities,
+  })
+
+  -- Enable LSP servers
+  vim.lsp.enable({
+    'zls',
+    'lua_ls',
+  })
 end)
 
 -- Formatting =================================================================
@@ -171,3 +187,21 @@ later(function() add({ 'https://github.com/rafamadriz/friendly-snippets' }) end)
 --   -- Enable only one
 --   vim.cmd('color everforest')
 -- end)
+
+--
+--   require('copilot').setup({
+--   suggestion = {
+--     enabled = true,
+--     auto_trigger = true,   -- auto-show suggestions
+--     keymap = {
+--       accept = "<C-l>",    -- accept suggestion
+--       next = "<C-n>",      -- next suggestion
+--       prev = "<C-p>",      -- previous suggestion
+--       dismiss = "<C-e>",   -- dismiss
+--     },
+--   },
+--   panel = {
+--     enabled = false,
+--   },
+-- })
+-- -- end)
